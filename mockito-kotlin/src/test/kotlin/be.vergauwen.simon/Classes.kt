@@ -1,4 +1,4 @@
-/*
+package be.vergauwen.simon/*
 * The MIT License
 *
 * Copyright (c) 2016 Niek Haarman

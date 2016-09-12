@@ -1,8 +1,6 @@
-import com.nhaarman.mockito_kotlin.argumentCaptor
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.verify
+package be.vergauwen.simon
+
 import com.nhaarman.expect.expect
-import com.nhaarman.mockito_kotlin.capture
 import org.junit.Test
 import java.util.*
 

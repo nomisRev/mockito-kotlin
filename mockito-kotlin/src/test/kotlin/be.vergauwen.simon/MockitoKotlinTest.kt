@@ -1,4 +1,4 @@
-/*
+package be.vergauwen.simon/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -23,6 +23,35 @@
  * THE SOFTWARE.
  */
 
-package be.simon.vergauwen.mockito1_kotlin
+import com.nhaarman.expect.expect
+import org.junit.Test
 
-class MockitoKotlinException(message: String?, cause: Throwable?) : RuntimeException(message, cause)
+class MockitoKotlinTest {
+
+    @Test
+    fun register() {
+        /* Given */
+        val closed = Closed()
+        MockitoKotlin.registerInstanceCreator { closed }
+
+        /* When */
+        val result = createInstance<Closed>()
+
+        /* Then */
+        expect(result).toBe(closed)
+    }
+
+    @Test
+    fun unregister() {
+        /* Given */
+        val closed = Closed()
+        MockitoKotlin.registerInstanceCreator { closed }
+        MockitoKotlin.unregisterInstanceCreator<Closed>()
+
+        /* When */
+        val result = createInstance<Closed>()
+
+        /* Then */
+        expect(result).toNotBeTheSameAs(closed)
+    }
+}

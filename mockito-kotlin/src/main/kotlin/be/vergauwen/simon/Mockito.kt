@@ -1,3 +1,5 @@
+package be.vergauwen.simon
+
 /*
  * The MIT License
  *
@@ -23,12 +25,13 @@
  * THE SOFTWARE.
  */
 
-package be.simon.vergauwen.mockito1_kotlin
-
+import org.hamcrest.BaseMatcher
+import org.hamcrest.Description
 import org.mockito.InOrder
 import org.mockito.MockSettings
 import org.mockito.MockingDetails
 import org.mockito.Mockito
+import org.mockito.internal.util.Decamelizer
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 import org.mockito.stubbing.OngoingStubbing
@@ -37,12 +40,22 @@ import org.mockito.verification.VerificationMode
 import org.mockito.verification.VerificationWithTimeout
 import kotlin.reflect.KClass
 
-fun after(millis: Long) = Mockito.after(millis)
+fun after(millis: Int) = Mockito.after(millis)
 
 inline fun <reified T : Any> any() = Mockito.any(T::class.java) ?: createInstance<T>()
 inline fun <reified T : Any?> anyArray(): Array<T> = Mockito.any(Array<T>::class.java) ?: arrayOf()
-inline fun <reified T : Any> anyVararg(): T = Mockito.any<T>() ?: createInstance<T>()
-inline fun <reified T : Any> argThat(noinline predicate: T.() -> Boolean) = Mockito.argThat<T> { it -> (it as T).predicate() } ?: createInstance(T::class)
+inline fun <reified T : Any> anyVararg(): T = Mockito.anyVararg<T>() ?: createInstance<T>()
+
+inline fun <reified T : Any> argThat(noinline predicate: T.() -> Boolean) = Mockito.argThat<T>(object : BaseMatcher<T>() {
+    override fun matches(p0: Any?): Boolean = (p0 as T).predicate()
+
+    override fun describeTo(p0: Description?) {
+        p0?.appendText(Decamelizer.decamelizeMatcher( T::class.java.simpleName))
+    }
+
+}) ?: createInstance(T::class)
+
+//inline fun <reified T : Any> argThat(noinline predicate: T.() -> Boolean) = Mockito.argThat<T> { it -> (it as T).predicate() } ?: createInstance(T::class)
 inline fun <reified T : Any> argForWhich(noinline predicate: T.() -> Boolean) = argThat(predicate)
 
 fun atLeast(numInvocations: Int): VerificationMode = Mockito.atLeast(numInvocations)!!
@@ -50,25 +63,21 @@ fun atLeastOnce(): VerificationMode = Mockito.atLeastOnce()!!
 fun atMost(maxNumberOfInvocations: Int): VerificationMode = Mockito.atMost(maxNumberOfInvocations)!!
 fun calls(wantedNumberOfInvocations: Int): VerificationMode = Mockito.calls(wantedNumberOfInvocations)!!
 
-fun <T> clearInvocations(vararg mocks: T) = Mockito.clearInvocations(*mocks)
-fun description(description: String): VerificationMode = Mockito.description(description)
-
 fun <T> doAnswer(answer: (InvocationOnMock) -> T?): Stubber = Mockito.doAnswer { answer(it) }!!
 
 fun doCallRealMethod(): Stubber = Mockito.doCallRealMethod()!!
 fun doNothing(): Stubber = Mockito.doNothing()!!
 fun doReturn(value: Any?): Stubber = Mockito.doReturn(value)!!
-fun doReturn(toBeReturned: Any?, vararg toBeReturnedNext: Any?): Stubber = Mockito.doReturn(toBeReturned, *toBeReturnedNext)!!
 fun doThrow(toBeThrown: KClass<out Throwable>): Stubber = Mockito.doThrow(toBeThrown.java)!!
-fun doThrow(vararg toBeThrown: Throwable): Stubber = Mockito.doThrow(*toBeThrown)!!
+fun doThrow(toBeThrown: Throwable): Stubber = Mockito.doThrow(toBeThrown)!!
 
 inline fun <reified T : Any> eq(value: T): T = Mockito.eq(value) ?: createInstance<T>()
 fun ignoreStubs(vararg mocks: Any): Array<out Any> = Mockito.ignoreStubs(*mocks)!!
 fun inOrder(vararg mocks: Any): InOrder = Mockito.inOrder(*mocks)!!
 
 inline fun <reified T : Any> isA(): T? = Mockito.isA(T::class.java)
-fun <T : Any> isNotNull(): T? = Mockito.isNotNull()
-fun <T : Any> isNull(): T? = Mockito.isNull()
+fun <T : Any> isNotNull(): Any = Mockito.isNotNull()
+fun <T : Any> isNull(): Any = Mockito.isNull()
 
 inline fun <reified T : Any> mock(): T = Mockito.mock(T::class.java)!!
 inline fun <reified T : Any> mock(defaultAnswer: Answer<Any>): T = Mockito.mock(T::class.java, defaultAnswer)!!
@@ -89,7 +98,7 @@ inline infix fun <reified T> OngoingStubbing<T>.doReturn(ts: List<T>): OngoingSt
 
 fun mockingDetails(toInspect: Any): MockingDetails = Mockito.mockingDetails(toInspect)!!
 fun never(): VerificationMode = Mockito.never()!!
-fun <T : Any> notNull(): T? = Mockito.notNull()
+fun <T : Any> notNull(): Any = Mockito.notNull()
 fun only(): VerificationMode = Mockito.only()!!
 fun <T> refEq(value: T, vararg excludeFields: String): T? = Mockito.refEq(value, *excludeFields)
 
@@ -97,7 +106,6 @@ fun <T> reset(vararg mocks: T) = Mockito.reset(*mocks)
 
 fun <T> same(value: T): T? = Mockito.same(value)
 
-inline fun <reified T : Any> spy(): T = Mockito.spy(T::class.java)!!
 fun <T> spy(value: T): T = Mockito.spy(value)!!
 
 fun timeout(millis: Long): VerificationWithTimeout = Mockito.timeout(millis)!!

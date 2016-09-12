@@ -1,4 +1,4 @@
-/*
+package be.vergauwen.simon/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -24,36 +24,60 @@
  */
 
 import com.nhaarman.expect.expect
-import com.nhaarman.mockito_kotlin.MockitoKotlin
-import com.nhaarman.mockito_kotlin.createInstance
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
 
-class MockitoKotlinTest {
+class EqTest {
 
-    @Test
-    fun register() {
-        /* Given */
-        val closed = Closed()
-        MockitoKotlin.registerInstanceCreator { closed }
+    private val interfaceInstance: MyInterface = MyClass()
+    private val openClassInstance: MyClass = MyClass()
+    private val closedClassInstance: ClosedClass = ClosedClass()
 
-        /* When */
-        val result = createInstance<Closed>()
+    private lateinit var doAnswer: Open
 
-        /* Then */
-        expect(result).toBe(closed)
+    @Before
+    fun setup() {
+        /* Create a proper Mockito state */
+        doAnswer = Mockito.doAnswer { }.`when`(mock())
+    }
+
+    @After
+    fun tearDown() {
+        /* Close `any` Mockito state */
+        doAnswer.go(0)
     }
 
     @Test
-    fun unregister() {
-        /* Given */
-        val closed = Closed()
-        MockitoKotlin.registerInstanceCreator { closed }
-        MockitoKotlin.unregisterInstanceCreator<Closed>()
-
+    fun eqInterfaceInstance() {
         /* When */
-        val result = createInstance<Closed>()
+        val result = eq(interfaceInstance)
 
         /* Then */
-        expect(result).toNotBeTheSameAs(closed)
+        expect(result).toNotBeNull()
     }
+
+    @Test
+    fun eqOpenClassInstance() {
+        /* When */
+        val result = eq(openClassInstance)
+
+        /* Then */
+        expect(result).toNotBeNull()
+    }
+
+    @Test
+    fun eqClosedClassInstance() {
+        /* When */
+        val result = eq(closedClassInstance)
+
+        /* Then */
+        expect(result).toNotBeNull()
+    }
+
+    private interface MyInterface
+    private open class MyClass : MyInterface
+    class ClosedClass
 }
+

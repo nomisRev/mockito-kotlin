@@ -1,3 +1,5 @@
+package be.vergauwen.simon
+
 /*
  * The MIT License
  *
@@ -23,7 +25,6 @@
  * THE SOFTWARE.
  */
 
-package be.simon.vergauwen.mockito1_kotlin
 
 import java.util.*
 import kotlin.reflect.KClass

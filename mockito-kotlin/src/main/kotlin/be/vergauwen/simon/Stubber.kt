@@ -1,3 +1,5 @@
+package be.vergauwen.simon
+
 /*
  * The MIT License
  *
@@ -22,8 +24,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package be.simon.vergauwen.mockito1_kotlin
 
 import org.mockito.stubbing.Stubber
 

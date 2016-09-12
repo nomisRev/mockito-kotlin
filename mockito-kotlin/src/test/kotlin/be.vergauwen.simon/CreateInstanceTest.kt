@@ -1,4 +1,4 @@
-/*
+package be.vergauwen.simon/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -25,8 +25,6 @@
 
 import com.nhaarman.expect.expect
 import com.nhaarman.expect.expectErrorWithMessage
-import com.nhaarman.mockito_kotlin.MockitoKotlin
-import com.nhaarman.mockito_kotlin.createInstance
 import org.junit.Test
 import java.util.*
 import kotlin.reflect.KClass

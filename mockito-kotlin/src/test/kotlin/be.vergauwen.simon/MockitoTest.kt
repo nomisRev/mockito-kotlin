@@ -1,8 +1,8 @@
+package be.vergauwen.simon
+
 import com.nhaarman.expect.expect
 import com.nhaarman.expect.expectErrorWithMessage
-import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
-import org.mockito.exceptions.base.MockitoAssertionError
 import java.io.IOException
 
 /*
@@ -189,21 +189,9 @@ class MockitoTest {
             string("")
         }
 
-        clearInvocations(mock)
+        reset(mock)
 
         verify(mock, never()).string(any())
-    }
-
-    @Test
-    fun testDescription() {
-        try {
-            mock<Methods>().apply {
-                verify(this, description("Test")).string(any())
-            }
-            throw AssertionError("Verify should throw Exception.")
-        } catch (e: MockitoAssertionError) {
-            expect(e.message).toContain("Test")
-        }
     }
 
     @Test
@@ -260,7 +248,7 @@ class MockitoTest {
     fun testDoReturnNullValues() {
         val mock = mock<Methods>()
 
-        doReturn(null, null).whenever(mock).stringResult()
+        doReturn(listOf(null, null)).whenever(mock).stringResult()
 
         expect(mock.stringResult()).toBeNull()
         expect(mock.stringResult()).toBeNull()
@@ -270,7 +258,7 @@ class MockitoTest {
     fun testDoReturnValues() {
         val mock = mock<Methods>()
 
-        doReturn("test", "test2").whenever(mock).stringResult()
+        doReturn(listOf("test", "test2")).whenever(mock).stringResult()
 
         expect(mock.stringResult()).toBe("test")
         expect(mock.stringResult()).toBe("test2")
