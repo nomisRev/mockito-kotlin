@@ -23,11 +23,10 @@
  * THE SOFTWARE.
  */
 
-package com.nhaarman.mockito_kotlin
+package be.simon.vergauwen.mockito1_kotlin
 
 import org.mockito.Answers
 import org.mockito.internal.creation.MockSettingsImpl
-import org.mockito.internal.creation.bytebuddy.MockMethodInterceptor
 import org.mockito.internal.util.MockUtil
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Modifier
@@ -137,13 +136,10 @@ private fun <T : Any> KFunction<T>.newInstance(): T {
             it to it.type.createNullableInstance<T>()
         })
     } catch(e: InvocationTargetException) {
-        throw MockitoKotlinException(
+        throw Exception(
                 """
-
         Could not create an instance of class ${this.returnType}, because of an error with the following message:
-
             "${e.cause?.message}"
-
         Try registering an instance creator yourself, using MockitoKotlin.registerInstanceCreator<${this.returnType}> {...}.""",
                 e.cause
         )
@@ -169,9 +165,8 @@ private fun <T : Any> KType.createNullableInstance(): T? {
  */
 @Suppress("UNCHECKED_CAST")
 private fun <T> Class<T>.uncheckedMock(): T {
-    val impl = MockSettingsImpl<T>().defaultAnswer(Answers.RETURNS_DEFAULTS) as MockSettingsImpl<T>
+    val impl = MockSettingsImpl<T>().defaultAnswer(Answers.RETURNS_DEFAULTS.get()) as MockSettingsImpl<T>
     val creationSettings = impl.confirm(this)
-    return MockUtil.createMock(creationSettings).apply {
-        (this as MockMethodInterceptor.MockAccess).mockitoInterceptor = null
-    }
+    val mockUtil = MockUtil()
+    return mockUtil.createMock(creationSettings)
 }

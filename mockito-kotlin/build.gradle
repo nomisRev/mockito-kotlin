@@ -20,46 +20,11 @@ repositories {
 dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-  compile "org.mockito:mockito-core:2.1.0-beta.125"
+  compile "org.mockito:mockito-core:1.10.8"
 
   /* Tests */
   testCompile "junit:junit:4.12"
   testCompile "com.nhaarman:expect.kt:0.6.0"
-}
-
-publishing {
-  publications {
-    MyPublication(MavenPublication) {
-      from components.java
-      artifact javadocJar
-      artifact sourcesJar
-
-      groupId 'com.nhaarman'
-      artifactId 'mockito-kotlin'
-      version rootProject.ext.versionName
-    }
-  }
-}
-
-bintray {
-  user = hasProperty('bintray_user') ? bintray_user : System.getenv('BINTRAY_USER')
-  key = hasProperty('bintray_key') ? bintray_key : System.getenv('BINTRAY_KEY')
-  publications = ['MyPublication']
-
-  pkg {
-    repo = 'maven'
-    name = "Mockito-Kotlin"
-    desc = "Using Mockito with Kotlin"
-
-    licenses = ['MIT']
-    vcsUrl = 'https://github.com/bintray/gradle-bintray-plugin.git'
-
-    version {
-      name = rootProject.ext.versionName
-      desc = 'Using Mockito with Kotlin'
-      vcsTag = rootProject.ext.versionName
-    }
-  }
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {

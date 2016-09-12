@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package com.nhaarman.mockito_kotlin
+package be.simon.vergauwen.mockito1_kotlin
 
 import java.util.*
 import kotlin.reflect.KClass

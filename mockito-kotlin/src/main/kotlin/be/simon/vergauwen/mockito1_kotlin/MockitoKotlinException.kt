@@ -23,8 +23,6 @@
  * THE SOFTWARE.
  */
 
-package com.nhaarman.mockito_kotlin
+package be.simon.vergauwen.mockito1_kotlin
 
-import org.mockito.stubbing.Stubber
-
-fun <T> Stubber.whenever(mock: T) = `when`(mock)
+class MockitoKotlinException(message: String?, cause: Throwable?) : RuntimeException(message, cause)

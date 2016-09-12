@@ -23,13 +23,8 @@
  * THE SOFTWARE.
  */
 
-package com.nhaarman.mockito_kotlin
+package be.simon.vergauwen.mockito1_kotlin
 
-import org.mockito.ArgumentCaptor
+import org.mockito.stubbing.Stubber
 
-inline fun <reified T : Any> argumentCaptor() = ArgumentCaptor.forClass(T::class.java)
-inline fun <reified T : Any> capture(captor: ArgumentCaptor<T>): T = captor.capture() ?: createInstance<T>()
-inline fun <reified T : Any> capture(noinline consumer: (T) -> Unit): T {
-    var times = 0
-    return argThat { if (++times == 1) consumer.invoke(this); true }
-}
+fun <T> Stubber.whenever(mock: T) = `when`(mock)
