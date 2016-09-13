@@ -1,4 +1,4 @@
-package be.vergauwen.simon
+package be.vergauwen.simon.mockito1_kotlin
 
 /*
  * The MIT License
@@ -39,38 +39,44 @@ class MockitoKotlin {
         private val creators: MutableMap<KClass<*>, MutableList<Pair<String, () -> Any>>> = HashMap()
 
         /**
-         * Registers a function to be called when an instance of T is necessary.
+         *
+         * Currently not supported
+         *
          */
-        inline fun <reified T : Any> registerInstanceCreator(noinline creator: () -> T) = registerInstanceCreator(T::class, creator)
 
-        /**
-         * Registers a function to be called when an instance of T is necessary.
-         */
-        fun <T : Any> registerInstanceCreator(kClass: KClass<T>, creator: () -> T) {
-            val element = Error().stackTrace[1]
-
-            creators.getOrPut(kClass) { ArrayList<Pair<String, () -> Any>>() }
-                    .add(element.toFileIdentifier() to creator)
-        }
-
-        /**
-         * Unregisters an instance creator.
-         */
-        inline fun <reified T : Any> unregisterInstanceCreator() = unregisterInstanceCreator(T::class)
-
-        /**
-         * Unregisters an instance creator.
-         */
-        fun <T : Any> unregisterInstanceCreator(kClass: KClass<T>) = creators.remove(kClass)
-
-        /**
-         * Clears al instance creators.
-         */
-        fun resetInstanceCreators() = creators.clear()
+        //        /**
+//         * Registers a function to be called when an instance of T is necessary.
+//         */
+//        inline fun <reified T : Any> registerInstanceCreator(noinline creator: () -> T) = registerInstanceCreator(T::class, creator)
+//
+//        /**
+//         * Registers a function to be called when an instance of T is necessary.
+//         */
+//        fun <T : Any> registerInstanceCreator(kClass: KClass<T>, creator: () -> T) {
+//            val element = Error().stackTrace[1]
+//
+//            creators.getOrPut(kClass) { ArrayList<Pair<String, () -> Any>>() }
+//                    .add(element.toFileIdentifier() to creator)
+//        }
+//
+//        /**
+//         * Unregisters an instance creator.
+//         */
+//        inline fun <reified T : Any> unregisterInstanceCreator() = unregisterInstanceCreator(T::class)
+//
+//        /**
+//         * Unregisters an instance creator.
+//         */
+//        fun <T : Any> unregisterInstanceCreator(kClass: KClass<T>) = creators.remove(kClass)
+//
+//        /**
+//         * Clears al instance creators.
+//         */
+//        fun resetInstanceCreators() = creators.clear()
 
         internal fun <T : Any> instanceCreator(kClass: KClass<T>): (() -> Any)? {
             val stacktrace = Error().stackTrace.filterNot {
-                it.className.contains("com.nhaarman.mockito_kotlin")
+                it.className.contains("be.vergauwen.simon")
             }[0]
 
             return creators[kClass]

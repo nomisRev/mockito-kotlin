@@ -1,4 +1,4 @@
-package be.vergauwen.simon/*
+package be.vergauwen.simon.mockito1_kotlin/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -23,75 +23,63 @@ package be.vergauwen.simon/*
  * THE SOFTWARE.
  */
 
+import be.vergauwen.simon.mockito1_kotlin.eq
+import be.vergauwen.simon.mockito1_kotlin.mock
 import com.nhaarman.expect.expect
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
-import org.mockito.Mockito.RETURNS_DEEP_STUBS
-import org.mockito.exceptions.base.MockitoException
-import java.util.*
+import org.mockito.Mockito
 
-class MockTest {
+class EqTest {
 
-    private lateinit var propertyInterfaceVariable: MyInterface
-    private lateinit var propertyClassVariable: MyClass
+    private val interfaceInstance: MyInterface = MyClass()
+    private val openClassInstance: MyClass = MyClass()
+    private val closedClassInstance: ClosedClass = ClosedClass()
+
+    private lateinit var doAnswer: Open
+
+    @Before
+    fun setup() {
+        /* Create a proper Mockito state */
+        doAnswer = Mockito.doAnswer { }.`when`(mock())
+    }
+
+    @After
+    fun tearDown() {
+        /* Close `any` Mockito state */
+        doAnswer.go(0)
+    }
 
     @Test
-    fun localInterfaceValue() {
+    fun eqInterfaceInstance() {
         /* When */
-        val instance: MyInterface = mock()
+        val result = eq(interfaceInstance)
 
         /* Then */
-        expect(instance).toNotBeNull()
+        expect(result).toNotBeNull()
     }
 
     @Test
-    fun propertyInterfaceVariable() {
+    fun eqOpenClassInstance() {
         /* When */
-        propertyInterfaceVariable = mock()
+        val result = eq(openClassInstance)
 
         /* Then */
-        expect(propertyInterfaceVariable).toNotBeNull()
+        expect(result).toNotBeNull()
     }
 
     @Test
-    fun localClassValue() {
+    fun eqClosedClassInstance() {
         /* When */
-        val instance: MyClass = mock()
+        val result = eq(closedClassInstance)
 
         /* Then */
-        expect(instance).toNotBeNull()
-    }
-
-    @Test
-    fun propertyClassVariable() {
-        /* When */
-        propertyClassVariable = mock()
-
-        /* Then */
-        expect(propertyClassVariable).toNotBeNull()
-    }
-
-    @Test
-    fun untypedVariable() {
-        /* When */
-        val instance = mock<MyClass>()
-
-        expect(instance).toNotBeNull()
-    }
-
-    @Test(expected = MockitoException::class)
-    fun closedClass() {
-        mock<ClosedClass>()
-    }
-
-    @Test
-    fun deepStubs() {
-        val cal: Calendar = mock(RETURNS_DEEP_STUBS)
-        whenever(cal.time.time).thenReturn(123L)
-        expect(cal.time.time).toBe(123L)
+        expect(result).toNotBeNull()
     }
 
     private interface MyInterface
-    private open class MyClass
-    private class ClosedClass
+    private open class MyClass : MyInterface
+    class ClosedClass
 }
 

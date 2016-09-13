@@ -1,4 +1,6 @@
-package be.vergauwen.simon/*
+package be.vergauwen.simon.mockito1_kotlin
+
+/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -23,35 +25,12 @@ package be.vergauwen.simon/*
  * THE SOFTWARE.
  */
 
-import com.nhaarman.expect.expect
-import org.junit.Test
 
-class MockitoKotlinTest {
+import org.mockito.ArgumentCaptor
 
-    @Test
-    fun register() {
-        /* Given */
-        val closed = Closed()
-        MockitoKotlin.registerInstanceCreator { closed }
-
-        /* When */
-        val result = createInstance<Closed>()
-
-        /* Then */
-        expect(result).toBe(closed)
-    }
-
-    @Test
-    fun unregister() {
-        /* Given */
-        val closed = Closed()
-        MockitoKotlin.registerInstanceCreator { closed }
-        MockitoKotlin.unregisterInstanceCreator<Closed>()
-
-        /* When */
-        val result = createInstance<Closed>()
-
-        /* Then */
-        expect(result).toNotBeTheSameAs(closed)
-    }
+inline fun <reified T : Any> argumentCaptor() = ArgumentCaptor.forClass(T::class.java)
+inline fun <reified T : Any> capture(captor: ArgumentCaptor<T>): T = captor.capture() ?: createInstance<T>()
+inline fun <reified T : Any> capture(noinline consumer: (T) -> Unit): T {
+    var times = 0
+    return argThat { if (++times == 1) consumer.invoke(this); true }
 }

@@ -1,4 +1,4 @@
-package be.vergauwen.simon/*
+package be.vergauwen.simon.mockito1_kotlin/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -403,17 +403,21 @@ class CreateInstanceTest {
         expect(result).toBe(UUID(0, 0))
     }
 
-    @Test
-    fun registeredInstanceCreator() {
-        /* Given */
-        MockitoKotlin.registerInstanceCreator { ForbiddenConstructor(2) }
+    /**
+     * Currently not supported
+     */
 
-        /* When */
-        val result = createInstance<ForbiddenConstructor>()
-
-        /* Then */
-        expect(result).toNotBeNull()
-    }
+//    @Test
+//    fun registeredInstanceCreator() {
+//        /* Given */
+//        MockitoKotlin.registerInstanceCreator { ForbiddenConstructor(2) }
+//
+//        /* When */
+//        val result = createInstance<ForbiddenConstructor>()
+//
+//        /* Then */
+//        expect(result).toNotBeNull()
+//    }
 
     @Test
     fun failedConstructor_throwsDescriptiveError() {

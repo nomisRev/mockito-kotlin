@@ -1,5 +1,9 @@
-package be.vergauwen.simon
+package be.vergauwen.simon.mockito1_kotlin
 
+import be.vergauwen.simon.mockito1_kotlin.argumentCaptor
+import be.vergauwen.simon.mockito1_kotlin.capture
+import be.vergauwen.simon.mockito1_kotlin.mock
+import be.vergauwen.simon.mockito1_kotlin.verify
 import com.nhaarman.expect.expect
 import org.junit.Test
 import java.util.*

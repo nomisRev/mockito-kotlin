@@ -1,4 +1,4 @@
-package be.vergauwen.simon
+package be.vergauwen.simon.mockito1_kotlin
 
 /*
  * The MIT License
@@ -137,7 +137,7 @@ private fun <T : Any> KFunction<T>.newInstance(): T {
             it to it.type.createNullableInstance<T>()
         })
     } catch(e: InvocationTargetException) {
-        throw Exception(
+        throw MockitoKotlinException(
                 """
         Could not create an instance of class ${this.returnType}, because of an error with the following message:
             "${e.cause?.message}"

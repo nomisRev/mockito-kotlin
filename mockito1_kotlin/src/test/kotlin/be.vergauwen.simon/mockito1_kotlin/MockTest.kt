@@ -1,4 +1,4 @@
-package be.vergauwen.simon/*
+package be.vergauwen.simon.mockito1_kotlin/*
  * The MIT License
  *
  * Copyright (c) 2016 Niek Haarman
@@ -23,81 +23,77 @@ package be.vergauwen.simon/*
  * THE SOFTWARE.
  */
 
+import be.vergauwen.simon.mockito1_kotlin.mock
+import be.vergauwen.simon.mockito1_kotlin.whenever
 import com.nhaarman.expect.expect
-import org.junit.After
 import org.junit.Test
-import org.mockito.Mockito
+import org.mockito.Mockito.RETURNS_DEEP_STUBS
 import org.mockito.exceptions.base.MockitoException
 import java.util.*
 
-class SpyTest {
+class MockTest {
 
-    private val interfaceInstance: MyInterface = MyClass()
-    private val openClassInstance: MyClass = MyClass()
-    private val closedClassInstance: ClosedClass = ClosedClass()
-
-    @After
-    fun a() {
-        Mockito.validateMockitoUsage()
-    }
-
+    private lateinit var propertyInterfaceVariable: MyInterface
+    private lateinit var propertyClassVariable: MyClass
 
     @Test
-    fun spyInterfaceInstance() {
+    fun localInterfaceValue() {
         /* When */
-        val result = spy(interfaceInstance)
+        val instance: MyInterface = mock()
 
         /* Then */
-        expect(result).toNotBeNull()
+        expect(instance).toNotBeNull()
     }
 
     @Test
-    fun spyOpenClassInstance() {
+    fun propertyInterfaceVariable() {
         /* When */
-        val result = spy(openClassInstance)
+        propertyInterfaceVariable = mock()
 
         /* Then */
-        expect(result).toNotBeNull()
+        expect(propertyInterfaceVariable).toNotBeNull()
+    }
+
+    @Test
+    fun localClassValue() {
+        /* When */
+        val instance: MyClass = mock()
+
+        /* Then */
+        expect(instance).toNotBeNull()
+    }
+
+    @Test
+    fun propertyClassVariable() {
+        /* When */
+        propertyClassVariable = mock()
+
+        /* Then */
+        expect(propertyClassVariable).toNotBeNull()
+    }
+
+    @Test
+    fun untypedVariable() {
+        /* When */
+        val instance = mock<MyClass>()
+
+        expect(instance).toNotBeNull()
     }
 
     @Test(expected = MockitoException::class)
-    fun spyClosedClassInstance() {
-        /* When */
-        spy(closedClassInstance)
+    fun closedClass() {
+        mock<ClosedClass>()
     }
 
     @Test
-    fun doReturnWithSpy() {
-        val date = spy(Date())
-        doReturn(123L).whenever(date).time
-        expect(date.time).toBe(123L)
-    }
-
-    @Test
-    fun doNothingWithSpy() {
-        val date = spy(Date(0))
-        doNothing().whenever(date).time = 5L
-        date.time = 5L;
-        expect(date.time).toBe(0L)
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun doThrowWithSpy() {
-        val date = spy(Date(0))
-        doThrow(IllegalArgumentException()).whenever(date).time
-        date.time
-    }
-
-    @Test
-    fun doCallRealMethodWithSpy() {
-        val date = spy(Date(0))
-        doReturn(123L).whenever(date).time
-        doCallRealMethod().whenever(date).time
-        expect(date.time).toBe(0L)
+    fun deepStubs() {
+        val cal: Calendar = mock(RETURNS_DEEP_STUBS)
+        whenever(cal.time.time).thenReturn(123L)
+        expect(cal.time.time).toBe(123L)
     }
 
     private interface MyInterface
-    private open class MyClass : MyInterface
+    private open class MyClass
     private class ClosedClass
 }
 
