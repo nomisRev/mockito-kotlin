@@ -1,6 +1,9 @@
-package be.vergauwen.simon.mockito1_kotlin/*
+package be.vergauwen.simon.mockito1_kotlin
+
+/*
  * The MIT License
  *
+ * Copyright (c) 2016 Simon Vergauwen
  * Copyright (c) 2016 Niek Haarman
  * Copyright (c) 2007 Mockito contributors
  *
