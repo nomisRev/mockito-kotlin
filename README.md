@@ -1,3 +1,6 @@
+[![](https://jitpack.io/v/nomisRev/mockito-kotlin.svg)](https://jitpack.io/#nomisRev/mockito-kotlin)
+
+
 # Forked from [https://github.com/nhaarman/mockito-kotlin](https://github.com/nhaarman/mockito-kotlin). Ported to Mockito 1 to support PowerMock!
 
 # Mockito1-Kotlin 
